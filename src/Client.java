@@ -44,7 +44,7 @@ public class Client extends JFrame {
         });
         thread.setDaemon(true);
         thread.start();
-        System.out.println("Receiver started");
+        System.out.println("Receiver started.");
     }
 
     private void initConnection() {
@@ -55,7 +55,7 @@ public class Client extends JFrame {
             socket = new Socket("Localhost", 8080);
             inputStream = new DataInputStream(socket.getInputStream());
             outputStream = new DataOutputStream(socket.getOutputStream());
-            System.out.println("Connection initialized");
+            System.out.println("Connection initialized.");
         } catch (IOException e) {
             e.printStackTrace();
         }
@@ -83,7 +83,7 @@ public class Client extends JFrame {
         outputTextArea = new JTextArea();
         inputTextField = new JTextField();
 
-        setTitle("Client");
+        setTitle("Client.");
         setBounds(500, 200, 700, 700);
         setDefaultCloseOperation(WindowConstants.EXIT_ON_CLOSE);
         setLayout(new BorderLayout());
@@ -103,7 +103,7 @@ public class Client extends JFrame {
 
         inputTextField.setBackground(new Color(255, 204, 51));
 
-        JButton button = new JButton("Send");
+        JButton button = new JButton("Send.");
 
         panel1.add(inputTextField);
         panel1.add(button);
@@ -120,7 +120,7 @@ public class Client extends JFrame {
         add(panel1, BorderLayout.SOUTH);
         setVisible(true);
 
-        System.out.println("GUI initialized ");
+        System.out.println("GUI initialized. ");
     }
 
     public static void main(String[] args) {

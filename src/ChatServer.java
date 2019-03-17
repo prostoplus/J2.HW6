@@ -15,7 +15,7 @@ public class ChatServer {
 
         try {
             server = new ServerSocket(8080);
-            System.out.println("Server started");
+            System.out.println("Server started.");
             socket = server.accept();
             System.out.println("Client connected: " + socket);
 
@@ -27,9 +27,9 @@ public class ChatServer {
                 @Override
                 public void run() {
                     while (true) {
-                        System.out.println("Server, write you message");
+                        System.out.println("Server, write your message.");
                         String msg = sc.nextLine();
-                        System.out.println("The message was send");
+                        System.out.println("The message was send.");
                         out.println(msg);
                     }
                 }
@@ -39,7 +39,7 @@ public class ChatServer {
                 String msg = in.nextLine();
                 if (msg.equals("/end")) break;
                 System.out.println("Client: " + msg);
-                //               out.flush(); // это автоматический/принудительный сброс буфера вывода
+//out.flush(); // это автоматический/принудительный сброс буфера вывода
             }
         } catch (IOException e) {
             e.printStackTrace();
@@ -47,7 +47,7 @@ public class ChatServer {
             try {
                 socket.close();
                 server.close();
-                System.out.println("Server closed");
+                System.out.println("Server closed.");
                 System.exit(0);
             } catch (IOException e) {
                 e.printStackTrace();
