@@ -19,6 +19,24 @@ public class ClientStorage {
         clients.remove(client);
     }
 
+    Client findClient(String login){
+        for (Client client : clients){
+            if (client.getLogin().equals(login)){
+                return client;
+            }
+        }
+        return null;
+    }
+
+    boolean containsClient(String login){
+        for (Client client : clients){
+            if (client.getLogin().equals(login)){
+                return true;
+            }
+        }
+        return false;
+    }
+
     public List<Client> getClients() {
         return clients;
     }

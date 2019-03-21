@@ -33,7 +33,7 @@ public class ClientApp extends JFrame {
             while (true) {
                 try {
                     String echoMessage = inputStream.readUTF();
-                    System.out.println("received message::" + echoMessage);
+                    System.out.println("Received message::" + echoMessage);
                     outputTextArea.append(echoMessage);
 
                 } catch (IOException e) {
@@ -43,15 +43,15 @@ public class ClientApp extends JFrame {
         });
         thread.setDaemon(true);
         thread.start();
-        System.out.println("receiver started");
+        System.out.println("Receiver started");
     }
 
     private void initConnection() {
         try {
-            socket = new Socket("localhost", 8080);
+            socket = new Socket("Localhost", 8080);
             outputStream = new DataOutputStream(socket.getOutputStream());
             inputStream = new DataInputStream(socket.getInputStream());
-            System.out.println("connection initialized");
+            System.out.println("Connection initialized");
         } catch (IOException e) {
             e.printStackTrace();
         }
@@ -68,7 +68,7 @@ public class ClientApp extends JFrame {
 
     private void sendMessage(String message) {
         try {
-            System.out.println("sent message::" + message);
+            System.out.println("Sent message::" + message);
             outputStream.writeUTF(message);
         } catch (IOException e) {
             e.printStackTrace();
@@ -94,7 +94,7 @@ public class ClientApp extends JFrame {
 
         setVisible(true);
 
-        System.out.println("gui initialized ");
+        System.out.println("GUI initialized ");
     }
 
     private JPanel createTextPanel() {
