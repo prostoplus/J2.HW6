@@ -2,7 +2,7 @@ package Server;
 
 import java.io.IOException;
 
-public class MessageService {
+class MessageService {
     private final ClientStorage clientStorage;
 
     public MessageService(ClientStorage clientStorage) {
@@ -20,4 +20,16 @@ public class MessageService {
         });
 
     }
+
+    synchronized void sendPrivateMessage(String login,String message) {
+        try {
+            Client receiver = clientStorage.findClient(login);
+            if(receiver != null){
+                receiver.getOs().writeUTF(message);
+            }
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+    }
+
 }

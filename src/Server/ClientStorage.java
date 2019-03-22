@@ -4,8 +4,6 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 
-import Server.model.Client;
-
 public class ClientStorage {
     private static List<Client> clients = Collections.synchronizedList(new ArrayList<>());
 
