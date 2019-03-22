@@ -39,7 +39,7 @@ public class ChatServer {
                         System.out.println("Client connected again: " + client + "::" + socket);
                         clientStorage.addClient(client);
                         client.getIs().writeUTF("logged");
-                        clientService.processMessage(data[1] + " enters chat.");
+                        ClientServiceImpl.processMessage(data[1] + " enters chat.");
                     } else {
                         System.out.println("Attempt to login failed for " + data[1] + " " + data[2]);
                         client.getOs().writeUTF("fail");
@@ -49,13 +49,13 @@ public class ChatServer {
                     System.out.println("Client disconnected:" + client + "::" + socket);
                     client.getOs().writeUTF("logout");
                     clientStorage.removeClient(client);
-                    clientService.processMessage(data[1] + " leaves chat.");
+                    ClientServiceImpl.processMessage(data[1] + " leaves chat.");
                     break;
                 case "logoutFull":
                     System.out.println("Client is off.");
                     try {
                         System.out.println("Socket for " + client + " is off");
-                        clientService.processMessage(data[1] + " leaves chat.");
+                        ClientServiceImpl.processMessage(data[1] + " leaves chat.");
                         socket.close();
                     } catch (IOException e) {
                         System.out.println("Unable to close socket");
@@ -64,7 +64,7 @@ public class ChatServer {
                     break;
                 case "message":
                     System.out.println("Received message");
-                    clientService.processMessage(data[1]);
+                    ClientServiceImpl.processMessage(data[1]);
                     break;
                 case "pm":
                     System.out.println("Received private message");

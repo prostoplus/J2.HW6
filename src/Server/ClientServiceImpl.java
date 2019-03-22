@@ -4,7 +4,7 @@ import java.io.IOException;
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
 
-class ClientServiceImpl implements ClientService {
+class ClientServiceImpl {
     private final Client client;
     private final MessageService messageService;
     private final ClientStorage clientStorage;
@@ -15,19 +15,14 @@ class ClientServiceImpl implements ClientService {
         this.clientStorage = clientStorage;
     }
 
-    @Override
-    public void processMessage() {
-        try {
-            while (true) {
-                String message = client.getIs().readUTF();
-                System.out.println(String.format("received message '%s' to '%s'", message, client));
+    void processMessage(String message) {
+        System.out.println(String.format("received message '%s' to '%s'", message, client));
+        Message processedMessage = new Message(message);
+        message = "message&" + client.getLogin() + ": " +
+                processedMessage.splitMessage() + "&" +
+                processedMessage.getTime();
 
-                messageService.sendMessages(client.getLogin() + "::" + message);
-            }
-        } catch (IOException io) {
-            clientStorage.removeClient(client);
-            io.printStackTrace();
-        }
+        messageService.sendMessages(message);
     }
 
     void processPrivateMessage(String login,String message) {
