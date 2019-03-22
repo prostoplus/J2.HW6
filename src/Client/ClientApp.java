@@ -68,7 +68,7 @@ public class ClientApp extends JFrame {
 
     private void sendMessage(String message) {
         try {
-            System.out.println("Sent message::" + message);
+            System.out.println("Sent message:: " + message);
             outputStream.writeUTF(message);
         } catch (IOException e) {
             e.printStackTrace();
@@ -157,5 +157,7 @@ public class ClientApp extends JFrame {
     public static void main(String[] args) {
         new ClientApp();
         new ClientApp();
+        new ClientApp();
+
     }
 }

@@ -14,7 +14,7 @@ class ChatServer2 {
 
     public static void main(String[] args) throws IOException {
 
-        try (ServerSocket serverSocket = new ServerSocket(4444)) {
+        try (ServerSocket serverSocket = new ServerSocket(8080)) {
             System.out.println("server started");
             while (true) {
                 Socket socket = serverSocket.accept();
@@ -122,13 +122,13 @@ class ChatServer2 {
             String[] data = client.getIs().readUTF().split("&");
             System.out.println("listen " + data[0]);
             switch (data[0]) {
-                case "message":
+                case "":
                     System.out.println("Received message");
-                    ClientServiceImpl.processMessage(data[1]);
+                    clientService.processMessage(data[1]);
                     break;
                 case "pm":
                     System.out.println("Received private message");
-                    ClientServiceImpl.processPrivateMessage(data[1],data[2]);
+                    clientService.processPrivateMessage(data[1],data[2]);
             }
         }
     }

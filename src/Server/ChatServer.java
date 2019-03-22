@@ -24,7 +24,7 @@ public class ChatServer {
                 System.out.println("client connected::" + client + "::" + socket);
                 clientStorage.addClient(client);
                 new Thread(() -> new ClientServiceImpl(client, messageService, clientStorage)
-                        .processMessage()).start();
+                        .processMessage("")).start();
             }
         }
     }
@@ -36,11 +36,11 @@ public class ChatServer {
             switch (data[0]) {
                 case "message":
                     System.out.println("Received message");
-                    ClientServiceImpl.processMessage(data[1]);
+                    clientService.processMessage(data[1]);
                     break;
                 case "pm":
                     System.out.println("Received private message");
-                    ClientServiceImpl.processPrivateMessage(data[1],data[2]);
+                    clientService.processPrivateMessage(data[1],data[2]);
             }
         }
     }
