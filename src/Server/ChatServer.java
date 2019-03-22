@@ -5,7 +5,10 @@ import java.io.DataOutputStream;
 import java.io.IOException;
 import java.net.ServerSocket;
 import java.net.Socket;
-
+/*
+Этот сервер заброшен)
+Новый написан на базе этого
+ */
 public class ChatServer {
     private static ClientsDB clientsDB = new ClientsDB();
     private static ClientStorage clientStorage = new ClientStorage();
@@ -25,22 +28,6 @@ public class ChatServer {
                 clientStorage.addClient(client);
                 new Thread(() -> new ClientServiceImpl(client, messageService, clientStorage)
                         .processMessage("")).start();
-            }
-        }
-    }
-
-    private static void listenToInputStream (Client client, Socket socket, ClientServiceImpl clientService) throws IOException {
-        if (!socket.isClosed()) {
-            String[] data = client.getIs().readUTF().split("&");
-            System.out.println("listen " + data[0]);
-            switch (data[0]) {
-                case "message":
-                    System.out.println("Received message");
-                    clientService.processMessage(data[1]);
-                    break;
-                case "pm":
-                    System.out.println("Received private message");
-                    clientService.processPrivateMessage(data[1],data[2]);
             }
         }
     }
