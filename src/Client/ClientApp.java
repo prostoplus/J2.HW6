@@ -1,11 +1,11 @@
+package Client;
+
 import java.awt.BorderLayout;
 import java.awt.Color;
 import java.io.DataInputStream;
 import java.io.DataOutputStream;
 import java.io.IOException;
 import java.net.Socket;
-import java.text.SimpleDateFormat;
-import java.util.Calendar;
 
 import javax.swing.BoxLayout;
 import javax.swing.JButton;
@@ -16,7 +16,7 @@ import javax.swing.JTextArea;
 import javax.swing.JTextField;
 import javax.swing.WindowConstants;
 
-public class Client extends JFrame {
+public class ClientApp extends JFrame {
 
     private Socket socket;
     private JTextArea outputTextArea;
@@ -24,10 +24,8 @@ public class Client extends JFrame {
     private DataOutputStream outputStream;
     private DataInputStream inputStream;
 
-    public Client() {
-        initConnection();
+    public ClientApp() {
         initGui();
-        initReceiver();
     }
 
     private void initReceiver() {
@@ -35,6 +33,7 @@ public class Client extends JFrame {
             while (true) {
                 try {
                     String echoMessage = inputStream.readUTF();
+                    System.out.println("Received message::" + echoMessage);
                     outputTextArea.append(echoMessage);
 
                 } catch (IOException e) {
@@ -48,13 +47,10 @@ public class Client extends JFrame {
     }
 
     private void initConnection() {
-
-        Socket socket = null;
-
         try {
             socket = new Socket("Localhost", 8080);
-            inputStream = new DataInputStream(socket.getInputStream());
             outputStream = new DataOutputStream(socket.getOutputStream());
+            inputStream = new DataInputStream(socket.getInputStream());
             System.out.println("Connection initialized");
         } catch (IOException e) {
             e.printStackTrace();
@@ -64,7 +60,6 @@ public class Client extends JFrame {
     private void processMessage() {
         if (!inputTextField.getText().equals("")) {
             String message = inputTextField.getText();
-            outputTextArea.append(new SimpleDateFormat(" yyyy/MM/dd HH:mm:ss").format(Calendar.getInstance().getTime()) + "\n" + message + "\n");
             inputTextField.setText("");
             sendMessage(message);
         }
@@ -73,6 +68,7 @@ public class Client extends JFrame {
 
     private void sendMessage(String message) {
         try {
+            System.out.println("Sent message:: " + message);
             outputStream.writeUTF(message);
         } catch (IOException e) {
             e.printStackTrace();
@@ -83,47 +79,85 @@ public class Client extends JFrame {
         outputTextArea = new JTextArea();
         inputTextField = new JTextField();
 
-        setTitle("Client");
+        setTitle("client.ClientApp");
         setBounds(500, 200, 700, 700);
         setDefaultCloseOperation(WindowConstants.EXIT_ON_CLOSE);
         setLayout(new BorderLayout());
 
-        JPanel panel = new JPanel();
-        panel.setLayout(new BorderLayout());
+        JPanel textPanel = createTextPanel();
+        JPanel buttonPanel = createButtonPanel();
+        JPanel authPanel = createAuthPanel(textPanel, buttonPanel);
 
+        add(textPanel, BorderLayout.CENTER);
+        add(buttonPanel, BorderLayout.SOUTH);
+        add(authPanel, BorderLayout.NORTH);
 
-        panel.add(new JScrollPane(outputTextArea));
-
-        outputTextArea.setBackground(new Color(51, 153, 255));
-        outputTextArea.setEditable(false);     //чтобы нельзя было печатать текст в поле
-
-
-        JPanel panel1 = new JPanel();
-        panel1.setLayout(new BoxLayout(panel1, BoxLayout.X_AXIS));
-
-        inputTextField.setBackground(new Color(255, 204, 51));
-
-        JButton button = new JButton("Send");
-
-        panel1.add(inputTextField);
-        panel1.add(button);
-
-        //нажатие кнопки
-        button.addActionListener(e -> {
-            processMessage();
-        });
-
-        //нажание Enter
-        inputTextField.addActionListener(e -> processMessage());
-
-        add(panel, BorderLayout.CENTER);
-        add(panel1, BorderLayout.SOUTH);
         setVisible(true);
 
         System.out.println("GUI initialized ");
     }
 
+    private JPanel createTextPanel() {
+        JPanel textPanel = new JPanel();
+        textPanel.setLayout(new BorderLayout());
+
+
+        textPanel.add(new JScrollPane(outputTextArea));
+        textPanel.setVisible(false);
+
+        outputTextArea.setBackground(new Color(51, 153, 255));
+        outputTextArea.setEditable(false);     //чтобы нельзя было печатать текст в поле
+        return textPanel;
+
+
+    }
+
+    private JPanel createButtonPanel() {
+        JPanel buttonPanel = new JPanel();
+        buttonPanel.setLayout(new BoxLayout(buttonPanel, BoxLayout.X_AXIS));
+
+        inputTextField.setBackground(new Color(255, 204, 51));
+        inputTextField.addActionListener(e -> processMessage());
+
+        JButton button = new JButton("Send");
+
+        buttonPanel.add(inputTextField);
+        buttonPanel.add(button);
+        buttonPanel.setVisible(false);
+        //нажатие кнопки
+        button.addActionListener(e -> {
+            processMessage();
+        });
+        return buttonPanel;
+    }
+
+    private JPanel createAuthPanel(JPanel textPanel, JPanel buttonPanel) {
+        JPanel authPanel = new JPanel();
+        JTextField loginField = new JTextField();
+        loginField.addActionListener(e -> processMessage());
+
+        JButton authButton = new JButton("Auth");
+        authButton.addActionListener(e -> {
+            initConnection();
+            initReceiver();
+            sendMessage(loginField.getText());
+            authPanel.setVisible(false);
+            buttonPanel.setVisible(true);
+            textPanel.setVisible(true);
+        });
+
+
+        authPanel.add(loginField);
+        authPanel.add(authButton);
+        authPanel.setLayout(new BoxLayout(authPanel, BoxLayout.X_AXIS));
+        authPanel.setVisible(true);
+        return authPanel;
+    }
+
     public static void main(String[] args) {
-        new Client();
+        new ClientApp();
+        new ClientApp();
+        new ClientApp();
+
     }
 }
